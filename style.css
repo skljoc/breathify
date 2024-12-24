@@ -1,11 +1,9 @@
-/* Basic resets */
+/* Reset & responsive basics */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-/* Responsive text, layout */
 body {
   font-family: Arial, sans-serif;
   background: #f0f4f8;
@@ -13,17 +11,16 @@ body {
   color: #333;
 }
 
+/* Container for the exercise cards */
 .container {
   margin: 30px auto;
   width: 90%;
   max-width: 600px;
 }
-
 h1 {
   font-size: 2.5em;
   margin: 20px 0;
 }
-
 .exercise-card {
   background-color: #ffffff;
   margin: 20px auto;
@@ -34,78 +31,108 @@ h1 {
   transition: transform 0.3s ease;
   max-width: 300px;
 }
-
 .exercise-card:hover {
   transform: scale(1.05);
 }
 
+/* Overlay styling */
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.7);
   display: none; /* shown dynamically */
   align-items: center;
   justify-content: center;
 }
-
 .exercise-container {
   background-color: #fff;
   padding: 30px;
   border-radius: 10px;
-  width: 90%;
+  width: 90%; 
   max-width: 400px;
   margin: 0 20px;
 }
-
 #exercise-title {
   margin-bottom: 10px;
 }
-
 #exercise-guide {
   margin-bottom: 20px;
 }
-
 #timer {
   font-weight: bold;
-  font-size: 1.2em;
   margin-bottom: 20px;
+  font-size: 1.2em;
 }
 
-/* Circle is the start/stop button */
+/* Circle = Start/Stop button */
 #breathing-circle {
   width: 150px;
   height: 150px;
   border-radius: 50%;
   background: #7fd8be;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
   cursor: pointer;
+  /* We'll animate both the circle size & the red outline. */
+  border: 4px solid transparent; /* initial border for outline effect */
 }
 
-/* Keyframes for each breathing pattern */
+/* Additional button for overlay close */
+#close-btn {
+  padding: 8px 16px;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#close-btn:hover {
+  background: #d7352a;
+}
+
+/* Keyframes for each breathing pattern (expanding/shrinking) + outline progress */
+
+/* Box Breathing - 16s cycle: 4 expand, 4 hold, 4 shrink, 4 hold */
 @keyframes boxBreathing {
-  /* 16s total: 4 expand, 4 hold, 4 shrink, 4 hold */
   0%   { transform: scale(1); }
   25%  { transform: scale(1.3); }
   50%  { transform: scale(1.3); }
   75%  { transform: scale(1); }
   100% { transform: scale(1); }
 }
-
-@keyframes fourSevenEight {
-  /* 19s total: 4 expand, 7 hold, 8 shrink */
-  0%    { transform: scale(1); }
-  21.05% { transform: scale(1.3); }
-  57.89% { transform: scale(1.3); }
-  100%  { transform: scale(1); }
+@keyframes boxOutline {
+  /* Also 16s so the red border acts like a "loading" ring per cycle */
+  0%   { border-color: transparent; }
+  25%  { border-color: red; }
+  50%  { border-color: red; }
+  75%  { border-color: red; }
+  100% { border-color: transparent; }
 }
 
+/* 4-7-8 - 19s cycle: 4 expand, 7 hold, 8 shrink */
+@keyframes fourSevenEight {
+  0%     { transform: scale(1); }
+  21.05% { transform: scale(1.3); }
+  57.89% { transform: scale(1.3); }
+  100%   { transform: scale(1); }
+}
+@keyframes fourSevenEightOutline {
+  0%   { border-color: transparent; }
+  21.05% { border-color: red; }
+  57.89% { border-color: red; }
+  100% { border-color: transparent; }
+}
+
+/* Pranayama - 12s cycle: 4 expand, 1 hold, 7 shrink */
 @keyframes pranayama {
-  /* 12s total: 4 expand, 1 hold, 7 shrink */
   0%    { transform: scale(1); }
   33.3% { transform: scale(1.3); }
   41.7% { transform: scale(1.3); }
   100%  { transform: scale(1); }
+}
+@keyframes pranayamaOutline {
+  0%   { border-color: transparent; }
+  33.3% { border-color: red; }
+  41.7% { border-color: red; }
+  100% { border-color: transparent; }
 }
