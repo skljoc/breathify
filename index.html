@@ -2,38 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Ensure mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Breathing Techniques</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Breathing Techniques</h1>
-    <div class="exercise-card" onclick="startExercise('box')">
+    <!-- Exercise Selection Cards -->
+    <div class="exercise-card" onclick="showOverlay('box')">
       <h2>Box Breathing</h2>
-      <p>4-4-4-4 second intervals</p>
+      <p>4-4-4-4, 10 cycles max</p>
     </div>
-    <div class="exercise-card" onclick="startExercise('4-7-8')">
+    <div class="exercise-card" onclick="showOverlay('478')">
       <h2>4-7-8 Breathing</h2>
-      <p>Inhale 4s - Hold 7s - Exhale 8s</p>
+      <p>4-7-8, 10 cycles max</p>
     </div>
-    <div class="exercise-card" onclick="startExercise('pranayama')">
+    <div class="exercise-card" onclick="showOverlay('pranayama')">
       <h2>Pranayama</h2>
-      <p>Guided deep breathing</p>
+      <p>4-1-7, 10 cycles max</p>
     </div>
   </div>
 
+  <!-- Overlay with the breathing circle -->
   <div class="overlay" id="overlay">
-    <div class="exercise-container" id="exercise-container">
+    <div class="exercise-container">
       <h2 id="exercise-title"></h2>
       <p id="exercise-guide"></p>
-      <div class="circle-animation"></div>
-      <button onclick="stopExercise()">Stop</button>
-      <audio id="audio-player" loop></audio>
+      <!-- Timer -->
+      <p id="timer">00:00</p>
+
+      <!-- Circle is the start/stop button -->
+      <div class="circle-animation" id="breathing-circle"></div>
+
+      <!-- Audio for instructions (voiceovers) -->
+      <audio id="audio-voiceover" loop></audio>
+      <!-- Separate background music -->
+      <audio id="audio-bg" loop></audio>
     </div>
   </div>
 
-  <!-- Place script right before the closing body tag -->
   <script src="script.js"></script>
 </body>
 </html>
