@@ -30,6 +30,12 @@ function startExercise(type) {
     }
 }
 
+// 🆕 Add this function to handle the animation
+function startAnimation(duration) {
+    const circle = document.querySelector('.circle-animation');
+    circle.style.animation = `breathing ${duration}s infinite ease-in-out`;
+}
+
 function playAudio(filePath) {
     audioPlayer.src = filePath;
     audioPlayer.play();
