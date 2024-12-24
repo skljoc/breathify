@@ -1,24 +1,22 @@
-// If you keep the script as a normal script, this is all you need:
-// (No "type=module" in the HTML)
-const overlay = document.getElementById('overlay');
-const circle = document.getElementById('breathing-circle');
-const titleEl = document.getElementById('exercise-title');
-const guideEl = document.getElementById('exercise-guide');
-const timerEl = document.getElementById('timer');
-
-const audioVoiceover = document.getElementById('audio-voiceover');
-const audioBg = document.getElementById('audio-bg');
+// Global references
+const overlay       = document.getElementById('overlay');
+const circle        = document.getElementById('breathing-circle');
+const titleEl       = document.getElementById('exercise-title');
+const guideEl       = document.getElementById('exercise-guide');
+const timerEl       = document.getElementById('timer');
+const audioVoiceover= document.getElementById('audio-voiceover');
+const audioBg       = document.getElementById('audio-bg');
 
 let currentExercise = null;
-let isRunning = false;
-let cycleCount = 0;
-const totalCycles = 10;
-let intervalId = null;
-let secondsElapsed = 0;
+let isRunning       = false;
+let cycleCount      = 0;
+const totalCycles   = 10; // max cycles
+let intervalId      = null;
+let secondsElapsed  = 0;
 
 /**
- * This function needs to be defined in the global scope
- * so it can be called by onclick in the HTML.
+ * Called from HTML: <div onclick="showOverlay('box')">
+ * Must be in the global scope (no "type=module").
  */
 function showOverlay(exercise) {
   currentExercise = exercise;
@@ -44,12 +42,11 @@ function showOverlay(exercise) {
       break;
   }
 
-  // Reset animations & audio
   resetAnimation();
 }
 
 /**
- * Called when the user clicks the circle (start/stop).
+ * Clicking the circle starts/stops the session.
  */
 circle.onclick = function() {
   if (!isRunning) {
@@ -59,74 +56,96 @@ circle.onclick = function() {
   }
 };
 
+/**
+ * Start the breathing animation, background music, voiceover, and timer.
+ */
 function startBreathing() {
   isRunning = true;
   cycleCount = 0;
   secondsElapsed = 0;
   timerEl.textContent = '00:00';
 
-  // Apply specific animation
+  // Assign the correct animations and audio
   switch (currentExercise) {
     case 'box':
-      circle.style.animation = 'boxBreathing 16s linear 10';
+      // 16s each cycle, repeated 10 times
+      circle.style.animation =
+        'boxBreathing 16s linear 10, ' +
+        'boxOutline 16s linear 10';
       audioVoiceover.src = 'assets/sounds/box-breathing.mp3';
-      audioBg.src = 'assets/sounds/meditation-bg.mp3';
+      audioBg.src        = 'assets/sounds/meditation-bg.mp3';
       break;
+
     case '478':
-      circle.style.animation = 'fourSevenEight 19s linear 10';
+      // 19s each cycle, repeated 10 times
+      circle.style.animation =
+        'fourSevenEight 19s linear 10, ' +
+        'fourSevenEightOutline 19s linear 10';
       audioVoiceover.src = 'assets/sounds/4-7-8-breathing.mp3';
-      audioBg.src = 'assets/sounds/meditation-bg.mp3';
+      audioBg.src        = 'assets/sounds/meditation-bg.mp3';
       break;
+
     case 'pranayama':
-      circle.style.animation = 'pranayama 12s linear 10';
+      // 12s each cycle, repeated 10 times
+      circle.style.animation =
+        'pranayama 12s linear 10, ' +
+        'pranayamaOutline 12s linear 10';
       audioVoiceover.src = 'assets/sounds/pranayama.mp3';
-      audioBg.src = 'assets/sounds/meditation-bg.mp3';
+      audioBg.src        = 'assets/sounds/meditation-bg.mp3';
       break;
   }
 
-  // Play voiceover + background
+  // Play voiceover & background
   audioVoiceover.play();
   audioBg.play();
 
-  // Listen for each animation iteration (cycle)
+  // Listen for cycle iterations and final end
   circle.addEventListener('animationiteration', onAnimationIteration);
-  // Listen for the final animation end (after 10 cycles)
   circle.addEventListener('animationend', onAnimationEnd);
 
   // Start the timer
   intervalId = setInterval(updateTimer, 1000);
 }
 
+/**
+ * Stop breathing animation, audio, and timer.
+ */
 function stopBreathing() {
   isRunning = false;
   circle.style.animation = 'none';
 
-  // Remove event listeners
   circle.removeEventListener('animationiteration', onAnimationIteration);
   circle.removeEventListener('animationend', onAnimationEnd);
 
-  // Stop audio
   audioVoiceover.pause();
   audioVoiceover.currentTime = 0;
   audioBg.pause();
   audioBg.currentTime = 0;
 
-  // Stop timer
   clearInterval(intervalId);
 }
 
+/**
+ * Each cycle triggers animationiteration. After the 10th iteration,
+ * the final end event fires.
+ */
 function onAnimationIteration() {
   cycleCount++;
   if (cycleCount >= totalCycles) {
-    // The next end event is final
+    // The next animationend event is final
   }
 }
 
+/**
+ * Called when the final iteration completes (10 cycles).
+ */
 function onAnimationEnd() {
-  // This means 10 cycles done
   stopBreathing();
 }
 
+/**
+ * Reset the circle animations & audio in preparation for a new session.
+ */
 function resetAnimation() {
   circle.style.animation = 'none';
   audioVoiceover.pause();
@@ -136,18 +155,22 @@ function resetAnimation() {
   clearInterval(intervalId);
 }
 
+/**
+ * Increment the timer every second, show as mm:ss.
+ */
 function updateTimer() {
   secondsElapsed++;
-  const mins = Math.floor(secondsElapsed / 60);
-  const secs = secondsElapsed % 60;
+  let mins = Math.floor(secondsElapsed / 60);
+  let secs = secondsElapsed % 60;
   let mm = mins < 10 ? '0' + mins : mins;
   let ss = secs < 10 ? '0' + secs : secs;
   timerEl.textContent = `${mm}:${ss}`;
 }
 
-/* 
-  If you must use type="module" in index.html, 
-  attach showOverlay to the window object like this:
-
-  window.showOverlay = showOverlay;
-*/
+/**
+ * Closes the overlay & stops everything immediately.
+ */
+function closeOverlay() {
+  overlay.style.display = 'none';
+  stopBreathing();
+}
