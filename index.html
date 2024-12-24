@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathing Techniques</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Breathing Techniques</h1>
+        <div class="exercise-card" onclick="startExercise('box')">
+            <h2>Box Breathing</h2>
+            <p>4-4-4-4 second intervals</p>
+        </div>
+        <div class="exercise-card" onclick="startExercise('4-7-8')">
+            <h2>4-7-8 Breathing</h2>
+            <p>Inhale 4s - Hold 7s - Exhale 8s</p>
+        </div>
+        <div class="exercise-card" onclick="startExercise('pranayama')">
+            <h2>Pranayama</h2>
+            <p>Guided deep breathing</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="exercise-container" id="exercise-container">
+            <h2 id="exercise-title"></h2>
+            <p id="exercise-guide"></p>
+            <div class="circle-animation"></div>
+            <button onclick="stopExercise()">Stop</button>
+            <audio id="audio-player" loop></audio>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
